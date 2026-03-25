@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HIFZUR AI</title>
+<meta name="theme-color" content="#10a37f">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%2310a37f'/><text y='.9em' x='50%' text-anchor='middle' font-size='55' font-family='Arial' font-weight='bold' fill='white'>H</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Inter',-apple-system,sans-serif;background:#fff;color:#0d0d0d;font-size:14px;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:#d9d9e3;border-radius:4px;}
+.app{display:flex;height:100vh;}
+.sb{width:260px;background:#f9f9f9;border-right:1px solid #e5e5e5;display:flex;flex-direction:column;height:100vh;flex-shrink:0;transition:transform .25s;z-index:100;}
+@media(max-width:768px){.sb{position:fixed;left:0;top:0;bottom:0;transform:translateX(-100%);box-shadow:4px 0 20px rgba(0,0,0,.15);}.sb.open{transform:translateX(0);}}
+.sb-top{padding:12px 10px 8px;}
+.nbtn{width:100%;display:flex;align-items:center;gap:9px;padding:10px 14px;border-radius:10px;border:1px solid #e5e5e5;background:#fff;color:#0d0d0d;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:background .15s;}
+.nbtn:hover{background:#f0f0f0;}
+.sblbl{padding:12px 14px 5px;font-size:11px;font-weight:600;color:#8e8ea0;letter-spacing:.5px;text-transform:uppercase;}
+.modes{padding:0 8px;display:flex;flex-direction:column;gap:1px;overflow-y:auto;max-height:340px;}
+.mbtn{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;border:none;background:transparent;font-size:13px;color:#555;cursor:pointer;font-family:inherit;width:100%;text-align:left;transition:background .15s;}
+.mbtn:hover{background:#efefef;color:#0d0d0d;}
+.mbtn.on{background:#e8f5f0;color:#10a37f;font-weight:600;}
+.mi{font-size:15px;width:22px;text-align:center;flex-shrink:0;}
+.sbdiv{height:1px;background:#e5e5e5;margin:8px 14px;flex-shrink:0;}
+.sbhist{flex:1;overflow-y:auto;padding:0 8px;}
+.hitem{padding:7px 10px;border-radius:7px;cursor:pointer;font-size:12px;color:#777;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background .15s;}
+.hitem:hover{background:#efefef;}
+.sbfoot{padding:10px;border-top:1px solid #e5e5e5;flex-shrink:0;}
+.urow{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;}
+.uav{width:32px;height:32px;border-radius:50%;background:#10a37f;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
+.uname{font-size:13px;font-weight:600;}
+.uplan{font-size:11px;color:#10a37f;font-weight:500;}
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:99;}
+.ov.show{display:block;}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:54px;border-bottom:1px solid #e5e5e5;background:#fff;flex-shrink:0;}
+.menubtn{width:34px;height:34px;border-radius:8px;border:1px solid #e5e5e5;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;}
+.tlogo{width:28px;height:28px;border-radius:50%;background:#10a37f;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;}
+.mtag{padding:3px 10px;border-radius:20px;background:#e8f5f0;color:#10a37f;font-size:11px;font-weight:600;}
+.tbtn{width:34px;height:34px;border-radius:8px;border:1px solid #e5e5e5;background:transparent;cursor:pointer;font-size:14px;}
+
+/* WELCOME */
+.welcome{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;gap:20px;overflow-y:auto;}
+.wlogo{width:60px;height:60px;border-radius:50%;background:#10a37f;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;}
+.wtitle{font-size:24px;font-weight:700;text-align:center;}
+.wsub{font-size:13px;color:#888;text-align:center;max-width:380px;line-height:1.6;margin-top:-12px;}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:560px;}
+@media(max-width:480px){.sgrid{grid-template-columns:1fr;}}
+.sc{padding:13px 15px;border:1px solid #e5e5e5;border-radius:12px;cursor:pointer;transition:all .15s;background:#fff;text-align:left;}
+.sc:hover{background:#f7f7f7;border-color:#ccc;}
+.st{font-size:13px;font-weight:600;margin-bottom:3px;}
+.sd{font-size:11px;color:#888;}
+
+/* CHAT */
+.cw{display:none;flex:1;flex-direction:column;overflow:hidden;}
+.cw.on{display:flex;}
+.ca{flex:1;overflow-y:auto;padding:8px 0;}
+.mrow{padding:12px 0;animation:fu .2s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.mrow.ai{background:#f7f7f8;}
+.mi2{max-width:680px;margin:0 auto;padding:0 16px;display:flex;gap:12px;align-items:flex-start;}
+.mav{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px;}
+.aiav{background:#10a37f;color:#fff;}
+.usrav{background:#5436da;color:#fff;}
+.mbdy{flex:1;min-width:0;}
+.mname{font-size:11px;font-weight:600;color:#888;margin-bottom:5px;}
+.mtxt{font-size:14px;line-height:1.75;color:#0d0d0d;word-break:break-word;}
+.mtxt strong{font-weight:700;}
+.mtxt h3{font-size:14px;font-weight:700;margin:10px 0 4px;}
+.mtxt pre{background:#f4f4f4;border:1px solid #e5e5e5;border-radius:8px;padding:12px;font-size:12px;overflow-x:auto;margin:8px 0;font-family:monospace;white-space:pre-wrap;}
+.mtxt ul{padding-left:18px;}.mtxt li{margin:3px 0;}
+.think{display:flex;align-items:center;gap:5px;padding:4px 0;}
+.td{width:7px;height:7px;border-radius:50%;background:#10a37f;animation:bn 1.2s ease-in-out infinite;}
+.td:nth-child(2){animation-delay:.2s;}.td:nth-child(3){animation-delay:.4s;}
+@keyframes bn{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-5px);opacity:1}}
+
+/* INPUT */
+.iz{padding:10px 16px 16px;background:#fff;border-top:1px solid #e5e5e5;flex-shrink:0;}
+.ii{max-width:680px;margin:0 auto;}
+.pills{display:flex;align-items:center;gap:5px;margin-bottom:8px;flex-wrap:wrap;}
+.pill{padding:3px 10px;border-radius:20px;border:1px solid #e5e5e5;background:#fff;color:#666;font-size:11px;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit;}
+.pill.on{border-color:#10a37f;color:#10a37f;background:#f0fdf9;}
+.ibox{display:flex;align-items:flex-end;gap:8px;background:#fff;border:1.5px solid #d9d9e3;border-radius:14px;padding:10px 12px;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:border-color .2s;}
+.ibox:focus-within{border-color:#10a37f;box-shadow:0 0 0 3px rgba(16,163,127,.1);}
+#inp{flex:1;border:none;outline:none;font-family:inherit;font-size:14px;color:#0d0d0d;resize:none;min-height:22px;max-height:120px;background:transparent;line-height:1.5;}
+#inp::placeholder{color:#aaa;}
+.ibtns{display:flex;align-items:center;gap:4px;}
+.ibtn{width:30px;height:30px;border-radius:7px;border:1px solid #e5e5e5;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:#666;}
+.send{width:34px;height:34px;border-radius:9px;border:none;background:#10a37f;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;}
+.send:hover{background:#0e9270;}
+.send:disabled{background:#d9d9e3;cursor:not-allowed;}
+.hint{text-align:center;font-size:11px;color:#bbb;margin-top:8px;}
+.vw{display:none;align-items:center;gap:2px;height:16px;}
+.vw.on{display:flex;}
+.vb{width:2px;background:#10a37f;border-radius:2px;animation:vba 1s ease-in-out infinite;}
+.vb:nth-child(1){height:4px}.vb:nth-child(2){height:9px;animation-delay:.1s}.vb:nth-child(3){height:14px;animation-delay:.2s}.vb:nth-child(4){height:7px;animation-delay:.3s}.vb:nth-child(5){height:11px;animation-delay:.4s}
+@keyframes vba{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(8px);background:#1a1a1a;color:#fff;padding:9px 20px;border-radius:24px;font-size:12px;opacity:0;transition:all .25s;pointer-events:none;z-index:9999;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#fi{display:none;}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="ov" id="ov" onclick="closeSB()"></div>
+
+<div class="sb" id="sb">
+  <div class="sb-top">
+    <button class="nbtn" onclick="newChat()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New chat
+    </button>
+  </div>
+  <div class="sblbl">Modes</div>
+  <div class="modes">
+    <button class="mbtn on" onclick="setMode('chat',this)"><span class="mi">💬</span>Chat</button>
+    <button class="mbtn" onclick="setMode('research',this)"><span class="mi">🧠</span>Deep Research</button>
+    <button class="mbtn" onclick="setMode('books',this)"><span class="mi">📚</span>World Books</button>
+    <button class="mbtn" onclick="setMode('islam',this)"><span class="mi">🌙</span>Islamic Deen</button>
+    <button class="mbtn" onclick="setMode('code',this)"><span class="mi">⚡</span>AI Coding</button>
+    <button class="mbtn" onclick="setMode('math',this)"><span class="mi">🧮</span>Math Solver</button>
+    <button class="mbtn" onclick="setMode('content',this)"><span class="mi">✍️</span>Content Creator</button>
+    <button class="mbtn" onclick="setMode('health',this)"><span class="mi">💊</span>Health Advisor</button>
+    <button class="mbtn" onclick="setMode('career',this)"><span class="mi">💼</span>Career & Jobs</button>
+    <button class="mbtn" onclick="setMode('news',this)"><span class="mi">📰</span>News</button>
+    <button class="mbtn" onclick="setMode('study',this)"><span class="mi">🎓</span>Study Helper</button>
+    <button class="mbtn" onclick="setMode('translate',this)"><span class="mi">🌍</span>Translate</button>
+  </div>
+  <div class="sbdiv"></div>
+  <div class="sblbl">Recent</div>
+  <div class="sbhist" id="hl"></div>
+  <div class="sbfoot">
+    <div class="urow">
+      <div class="uav">H</div>
+      <div><div class="uname">Hifzur</div><div class="uplan">✦ Super Plan · 50+ features</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <button class="menubtn" onclick="toggleSB()">☰</button>
+    <div class="brand">
+      <div class="tlogo">H</div>
+      HIFZUR AI
+      <span class="mtag" id="mtag">Chat</span>
+    </div>
+    <button class="tbtn" onclick="newChat()">✏️</button>
+  </div>
+
+  <div class="welcome" id="ws">
+    <div class="wlogo">H</div>
+    <div><div class="wtitle">How can I help you?</div>
+    <div class="wsub">HIFZUR AI — Books · Research · Islamic · Health · Career · Code</div></div>
+    <div class="sgrid">
+      <div class="sc" onclick="qs('Atomic Habits book ka complete summary aur key lessons batao')"><div class="st">📚 Book Summary</div><div class="sd">Kisi bhi book ka summary</div></div>
+      <div class="sc" onclick="qs('AI ka future kya hai — deeply research karke batao')"><div class="st">🧠 Deep Research</div><div class="sd">Koi bhi topic explore karo</div></div>
+      <div class="sc" onclick="qs('Subah aur Shaam ki dua — Arabic aur Urdu meaning ke saath')"><div class="st">🌙 Daily Dua</div><div class="sd">Subah, shaam, sone ki dua</div></div>
+      <div class="sc" onclick="qs('Viral YouTube video script likho AI topic pe')"><div class="st">✍️ Content Create</div><div class="sd">YouTube, blog, Instagram</div></div>
+      <div class="sc" onclick="qs('x² + 5x + 6 = 0 step by step solve karo')"><div class="st">🧮 Math Solver</div><div class="sd">Equations step-by-step</div></div>
+      <div class="sc" onclick="qs('Software developer ke liye professional resume banao')"><div class="st">💼 Career Guide</div><div class="sd">Resume, interview, jobs</div></div>
+    </div>
+  </div>
+
+  <div class="cw" id="cw">
+    <div class="ca" id="ca"></div>
+    <div class="iz">
+      <div class="ii">
+        <div class="pills">
+          <button class="pill on" id="p-deep" onclick="tp(this,'deep')">🔬 Deep</button>
+          <button class="pill on" id="p-mem" onclick="tp(this,'mem')">🧠 Memory</button>
+          <div class="vw" id="vw"><div class="vb"></div><div class="vb"></div><div class="vb"></div><div class="vb"></div><div class="vb"></div></div>
+        </div>
+        <div class="ibox">
+          <textarea id="inp" placeholder="Message HIFZUR AI..." rows="1"
+            onkeydown="onKey(event)"
+            oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+          <div class="ibtns">
+            <button class="ibtn" id="mic" onclick="toggleVoice()">🎙</button>
+            <button class="send" id="sb2" onclick="send()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="hint">HIFZUR AI · Books · Research · Islamic · Health · Career · Code</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const MDL='claude-sonnet-4-20250514';
+let msgs=[],pills={deep:false,mem:true};
+let voiceOn=false,recog=null,curMode='chat',memory={};
+
+const HINTS={research:'Kaunsa topic deeply research karna hai?',books:'Book ka naam — summary aur lessons dunga',islam:'Dua, Quran, Hadith, Islamic knowledge...',code:'Language aur task batao',math:'Math problem likho',content:'YouTube script / blog / Instagram...',health:'Health question kya hai?',career:'Career, resume, job...',news:'Kaunsa news explain karun?',study:'Kaunsa subject padhna hai?',translate:'Kya translate karna hai?',chat:'Message HIFZUR AI...'};
+
+const SYS=`You are HIFZUR AI — a super intelligent personal AI made for HIFZUR only.
+IDENTITY: HIFZUR AI. NOT Claude, NOT Anthropic. Hifzur ka personal AI.
+PERSONALITY: Smart, warm, genius best friend. Speak Hinglish naturally.
+CAPABILITIES: World books (millions), deep research, math step-by-step, coding, Islamic knowledge (Quran/Hadith/Duas in Arabic+transliteration+Urdu meaning), health advice, career guidance, content creation, news, translation.
+STYLE: Natural Hinglish, clear formatting, code blocks for code, numbered steps for math, Arabic+transliteration+Urdu meaning for duas. Health mein always say: doctor se zaroor consult karo.`;
+
+async function send(){
+  const f=document.getElementById('inp');
+  const txt=f.value.trim();
+  if(!txt)return;
+
+  let extra='';
+  if(pills.deep)extra+='\n[DEEP MODE: Comprehensive thorough analysis]';
+  if(curMode!=='chat')extra+=`\n[MODE: ${curMode.toUpperCase()}]`;
+  if(pills.mem&&Object.keys(memory).length)extra+='\n[MEMORY:'+JSON.stringify(memory)+']';
+
+  showWelcome(false);closeSB();
+  addMsg('user',txt);
+  f.value='';f.style.height='auto';
+  msgs.push({role:'user',content:txt});
+  addHist(txt);
+
+  const tid=addThink();
+  document.getElementById('sb2').disabled=true;
+
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({model:MDL,max_tokens:1500,system:SYS+extra,messages:msgs})
+    });
+    const d=await r.json();
+    removeThink(tid);
+    if(d.error){
+      addMsg('ai','❌ '+d.error.message);
+      return;
+    }
+    const rep=d.content?.[0]?.text||'Error. Try again.';
+    if(pills.mem){const m=txt.match(/(?:mera naam|my name)\s+(\w+)/i);if(m)memory.name=m[1];}
+    msgs.push({role:'assistant',content:rep});
+    addMsg('ai',rep);
+  }catch(e){
+    removeThink(tid);
+    addMsg('ai','❌ Error: '+e.message);
+  }
+  document.getElementById('sb2').disabled=false;
+}
+
+function qs(p){document.getElementById('inp').value=p;showWelcome(false);send();}
+function showWelcome(s){document.getElementById('ws').style.display=s?'flex':'none';document.getElementById('cw').classList.toggle('on',!s);}
+
+function addMsg(role,text){
+  const ca=document.getElementById('ca');
+  const d=document.createElement('div');
+  d.className='mrow '+(role==='ai'?'ai':'');
+  d.innerHTML=`<div class="mi2"><div class="mav ${role==='ai'?'aiav':'usrav'}">${role==='ai'?'H':'Me'}</div><div class="mbdy"><div class="mname">${role==='ai'?'HIFZUR AI':'You'}</div><div class="mtxt">${fmt(text)}</div></div></div>`;
+  ca.appendChild(d);ca.scrollTop=ca.scrollHeight;
+}
+
+function fmt(t){
+  return t
+    .replace(/```[\w]*\n?([\s\S]*?)```/g,'<pre>$1</pre>')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/^#{1,3} (.+)/gm,'<h3>$1</h3>')
+    .replace(/^[-•] (.+)/gm,'<li>$1</li>')
+    .replace(/\n/g,'<br>');
+}
+
+let tc=0;
+function addThink(){const id='t'+(++tc);const ca=document.getElementById('ca');const d=document.createElement('div');d.id=id;d.className='mrow ai';d.innerHTML=`<div class="mi2"><div class="mav aiav">H</div><div class="mbdy"><div class="mname">HIFZUR AI</div><div class="think"><div class="td"></div><div class="td"></div><div class="td"></div></div></div></div>`;ca.appendChild(d);ca.scrollTop=ca.scrollHeight;return id;}
+function removeThink(id){const e=document.getElementById(id);if(e)e.remove();}
+function showToast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2500);}
+function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
+function newChat(){msgs=[];document.getElementById('ca').innerHTML='';showWelcome(true);document.getElementById('inp').value='';closeSB();}
+function tp(btn,k){pills[k]=!pills[k];btn.classList.toggle('on',pills[k]);}
+function setMode(mode,el){document.querySelectorAll('.mbtn').forEach(b=>b.classList.remove('on'));el.classList.add('on');curMode=mode;document.getElementById('mtag').textContent=el.textContent.trim();document.getElementById('inp').placeholder=HINTS[mode]||'Message HIFZUR AI...';showWelcome(false);closeSB();}
+function addHist(t){if(!t)return;const l=document.getElementById('hl');const d=document.createElement('div');d.className='hitem';d.textContent='💬 '+t.slice(0,28)+(t.length>28?'...':'');l.insertBefore(d,l.firstChild);if(l.children.length>10)l.removeChild(l.lastChild);}
+function toggleSB(){document.getElementById('sb').classList.toggle('open');document.getElementById('ov').classList.toggle('show');}
+function closeSB(){document.getElementById('sb').classList.remove('open');document.getElementById('ov').classList.remove('show');}
+function toggleVoice(){
+  if(!('webkitSpeechRecognition'in window||'SpeechRecognition'in window)){showToast('Voice not supported');return;}
+  if(voiceOn){recog&&recog.stop();stopV();return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  recog=new SR();recog.lang='hi-IN';recog.interimResults=true;
+  recog.onstart=()=>{voiceOn=true;document.getElementById('vw').classList.add('on');document.getElementById('mic').style.color='#10a37f';showToast('Listening...');};
+  recog.onresult=e=>{document.getElementById('inp').value=Array.from(e.results).map(r=>r[0].transcript).join('');};
+  recog.onend=()=>{stopV();if(document.getElementById('inp').value.trim())send();};
+  recog.onerror=()=>{stopV();};
+  recog.start();
+}
+function stopV(){voiceOn=false;document.getElementById('vw').classList.remove('on');document.getElementById('mic').style.color='';}
+window.addEventListener('DOMContentLoaded',()=>showWelcome(true));
+</script>
+</body>
+</html>
